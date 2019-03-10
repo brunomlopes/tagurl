@@ -32,10 +32,7 @@ namespace TagUrl.Service
             if (!doc.RootElement.TryGetProperty("data", out var data)) return Empty;
             if (!data.TryGetProperty("children", out var children)) return Empty;
 
-            tags = children.EnumerateArray().Select(child =>
-            {
-                return child.GetProperty("data").GetProperty("subreddit").GetString();
-            }).ToArray();
+            tags = children.EnumerateArray().Select(child => child.GetProperty("data").GetProperty("subreddit").GetString()).ToArray();
 
             return await Task.FromResult(tags);
         }
