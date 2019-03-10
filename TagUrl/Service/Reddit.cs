@@ -30,7 +30,6 @@ namespace TagUrl.Service
             var doc = await JsonDocument.ParseAsync(response);
 
             if (!doc.RootElement.TryGetProperty("data", out var data)) return Empty;
-
             if (!data.TryGetProperty("children", out var children)) return Empty;
 
             tags = children.EnumerateArray().Select(child =>
