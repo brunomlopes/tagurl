@@ -6,7 +6,6 @@ namespace TagUrl.Service
     public interface ITagSuggester
     {
         string SourceName { get; }
-        Task<IReadOnlyCollection<string>> Suggest(string url, string title, string body,
-    string[] skipTags);
+        Task<IReadOnlyCollection<string>> Suggest(string url, string title, string body, string[] skipTags);
     }
 }

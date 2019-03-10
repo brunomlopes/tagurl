@@ -2,7 +2,6 @@
 {
     public class TagUrlSuggestion
     {
-
         public TagUrlSuggestion(string tag, string[] sources)
         {
             Tag = tag;
