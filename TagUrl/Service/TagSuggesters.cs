@@ -26,7 +26,11 @@ namespace TagUrl.Service
                 return s.Select(tag => (t.source, suggestion: tag.ToLowerInvariant())).ToImmutableArray();
             }).ToArray());
 
-            return suggestions.SelectMany(t => t).GroupBy(t => t.suggestion).Select(s =>
+            return suggestions
+                .SelectMany(t => t)
+                .GroupBy(t => t.suggestion)
+                .Where(t => !skipTags.Contains(t.Key))
+                .Select(s =>
             {
                 return new TagUrlSuggestion(s.Key, s.Select(i => i.source).Distinct().ToArray());
             }).ToImmutableArray();

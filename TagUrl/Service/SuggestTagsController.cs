@@ -13,10 +13,12 @@ namespace TagUrl.Service
     public class SuggestTagsController
     {
         private readonly MemoryCache _suggestionsCache;
+        private readonly TagUrlService _tagUrlService;
 
-        public SuggestTagsController(MemoryCache suggestionsCache)
+        public SuggestTagsController(MemoryCache suggestionsCache, TagUrlService tagUrlService)
         {
             _suggestionsCache = suggestionsCache;
+            _tagUrlService = tagUrlService;
         }
 
         public async Task SuggestTags(HttpContext context)
@@ -43,13 +45,15 @@ namespace TagUrl.Service
                     return;
                 }
 
-                _ = requestBody.RootElement.TryGetProperty("body", out var bodyProp);
-                _ = requestBody.RootElement.TryGetProperty("title", out var titleProp);
-                _ = requestBody.RootElement.TryGetProperty("existingTags", out var existingTagsProp);
+                if(requestBody.RootElement.TryGetProperty("body", out var bodyProp))
+                    body = bodyProp.GetString() ?? "";
+                if(requestBody.RootElement.TryGetProperty("title", out var titleProp))
+                    title = titleProp.GetString() ?? "";
+
+                if(requestBody.RootElement.TryGetProperty("existingTags", out var existingTagsProp))
+                    existingTags = existingTagsProp.EnumerateArray().Select(e => e.GetString()).ToArray();
                 url = urlProp.GetString();
-                title = titleProp.GetString() ?? "";
-                body = bodyProp.GetString() ?? "";
-                existingTags = existingTagsProp.EnumerateArray().Select(e => e.GetString()).ToArray();
+                
             }
             else
             {
@@ -66,7 +70,7 @@ namespace TagUrl.Service
             var key = ("tagSuggestions", url, title, body);
             var suggestions =
                 await _suggestionsCache.GetOrCreateAsync(key,
-                    async cacheEntry => await context.RequestServices.GetRequiredService<TagUrlService>()
+                    async cacheEntry => await _tagUrlService
                         .SuggestionsForAsync(url, title, body, existingTags));
 
 
