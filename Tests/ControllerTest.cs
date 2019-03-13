@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using Shouldly;
 using TagUrl.Service;
 using Xunit;
@@ -14,14 +15,14 @@ namespace Tests
 {
     public class ControllerTest
     {
-        private SuggestTagsController _controller;
-        private TagUrlService _tagUrlService;
+        private readonly SuggestTagsController _controller;
 
         public ControllerTest()
         {
-            _tagUrlService = new TagUrlService(new TagSuggesters());
+            var suggestersMock = Substitute.For<ITagSuggesters>();
+            var tagUrlService = new TagUrlService(suggestersMock);
 
-            _controller = new SuggestTagsController(new MemoryCache(new MemoryCacheOptions()), _tagUrlService);
+            _controller = new SuggestTagsController(new MemoryCache(new MemoryCacheOptions()), tagUrlService);
         }
 
         [Fact]

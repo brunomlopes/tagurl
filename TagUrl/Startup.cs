@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebSockets.Internal;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TagUrl.Service;
@@ -13,12 +14,19 @@ namespace TagUrl
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(_configuration);
             services.AddTransient<TagUrlService>();
-            services.AddTransient<TagSuggesters>();
+            services.AddTransient<ITagSuggesters, TagSuggesters>();
             services.AddTransient<SuggestTagsController>();
             services.AddSingleton(new MemoryCache(new MemoryCacheOptions()));
         }

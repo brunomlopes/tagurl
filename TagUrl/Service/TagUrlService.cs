@@ -5,16 +5,16 @@ namespace TagUrl.Service
 {
     public class TagUrlService
     {
-        private readonly TagSuggesters suggesters;
+        private readonly ITagSuggesters _suggesters;
 
-        public TagUrlService(TagSuggesters suggesters)
+        public TagUrlService(ITagSuggesters suggesters)
         {
-            this.suggesters = suggesters;
+            this._suggesters = suggesters;
         }
         internal async Task<IReadOnlyCollection<TagUrlSuggestion>> SuggestionsForAsync(
             string url, string title, string body, string[] existingTags)
         {
-            return await suggesters.Suggest(url, title, body, existingTags);
+            return await _suggesters.Suggest(url, title, body, existingTags);
         }
     }
 }

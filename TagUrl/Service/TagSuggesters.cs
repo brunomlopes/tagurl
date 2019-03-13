@@ -2,16 +2,17 @@
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace TagUrl.Service
 {
-    public class TagSuggesters
+    public class TagSuggesters : ITagSuggesters
     {
         private readonly ITagSuggester[] _suggesters;
 
-        public TagSuggesters()
+        public TagSuggesters(IConfiguration configuration)
         {
-            _suggesters = new ITagSuggester[] { new RedditTagSuggester(), new GithubTagSuggester() };
+            _suggesters = new ITagSuggester[] { new RedditTagSuggester(), new GithubTagSuggester(), new TextAnalysis(configuration["TextAnalysis:Key"]) };
         }
 
         public async Task<IReadOnlyCollection<TagUrlSuggestion>> Suggest(string url, string title, string body, string[] skipTags)
@@ -37,5 +38,9 @@ namespace TagUrl.Service
         }
     }
 
+    public interface ITagSuggesters
+    {
+        Task<IReadOnlyCollection<TagUrlSuggestion>> Suggest(string url, string title, string body, string[] skipTags);
+    }
 }
 
