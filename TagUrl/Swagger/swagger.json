@@ -1,0 +1,129 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This service suggets tags for urls, with a body and title.",
+    "version": "1.0.0",
+    "title": "brunomlopes-tagurl",
+    "contact": {
+      "email": "tagurl@brunomlopes.com"
+    }
+  },
+  "host": "brunomlopes-tagurl.azurewebsites.net",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "tag",
+      "description": "Suggest tags"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/suggest": {
+      "post": {
+        "tags": [
+          "tag"
+        ],
+        "summary": "Sugest tags for an url",
+        "description": "",
+        "operationId": "suggestTags",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SuggestionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Suggestion",
+            "schema": {
+              "$ref": "#/definitions/SuggestionResponse"
+            }
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "SuggestionRequest": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "existingTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "SuggestionResponse": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "existingTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "suggestions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Suggestion"
+          }
+        }
+      }
+    },
+    "Suggestion": {
+      "type": "object",
+      "properties": {
+        "tag": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
