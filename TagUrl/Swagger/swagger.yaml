@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "This service suggets tags for urls, with a body and title."
+  description: "This service suggests tags for urls, with a body and title."
   version: "1.0.0"
   title: "brunomlopes-tagurl"
   contact:
@@ -29,7 +29,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Pet object that needs to be added to the store"
+        description: "URL we want to tag, with an optional body and title to add more information"
         required: true
         schema:
           $ref: "#/definitions/SuggestionRequest"
