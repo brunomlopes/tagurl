@@ -30,7 +30,8 @@ namespace TagUrl.Service
 
             if (HttpMethods.IsPost(context.Request.Method))
             {
-                if (context.Request.ContentType != MediaTypeNames.Application.Json)
+                if (context.Request.ContentType != MediaTypeNames.Application.Json
+                    && context.Request.ContentType != MediaTypeNames.Application.Json+ ";charset=utf-8")
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     await context.Response.WriteAsync($"Content type {context.Request.ContentType} not acceptable. Use {MediaTypeNames.Application.Json}");
